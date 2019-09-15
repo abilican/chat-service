@@ -19,6 +19,10 @@ namespace ChatService.Client
             client = new ClientBase(socketProxy);
 
             client.ConnectServer();
+            if (client.IsConnected)
+            {
+                client.SendLoop();
+            }
 
             Console.ReadLine();
         }

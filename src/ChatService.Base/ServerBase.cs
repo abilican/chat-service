@@ -27,8 +27,7 @@ namespace ChatService.Base
             Console.WriteLine("Running server...");
             _socket.Bind(new IPEndPoint(IPAddress.Any, 500));
             _socket.Listen(10);
-            Console.WriteLine("Waiting for Client Connections");
-            BeginListen();
+            Console.WriteLine("Waiting for Client Connections");            
         }
 
         public void BeginListen()
@@ -54,7 +53,6 @@ namespace ChatService.Base
         private void AcceptCallBack(IAsyncResult iar)
         {
             //handle new connected client and update client list.
-
             _event.Set();
 
             Socket clientSocket = _socket.EndAccept(iar);
@@ -83,7 +81,7 @@ namespace ChatService.Base
                 string content = Encoding.ASCII.GetString(stateObject.Buffer, 0, bytesRead);
                 Console.WriteLine($"New Message From Client-{stateObject.ClientId}: {content}");
                 TimeSpan span = DateTime.Now - stateObject.LastConnectionTime;
-
+                //check last message send time if less then one second
                 if (span.TotalMilliseconds < 1000)
                 {
                     if (!stateObject.IsWarningMode)
@@ -104,9 +102,11 @@ namespace ChatService.Base
                 }
                 else
                 {
+                    //send empty message
                     SendMessage("-", stateObject.Socket);
                 }
             }
+
 
             if (continueReceiving)
             {
@@ -124,8 +124,8 @@ namespace ChatService.Base
 
         private void DisconnectClient(Socket socket)
         {
-            byte[] data = Encoding.ASCII.GetBytes("you have been disconnected");
-            socket.Send(data);
+            //disconnect client
+            SendMessage("you have been disconnected", socket);
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
         }
