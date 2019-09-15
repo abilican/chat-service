@@ -43,10 +43,12 @@ namespace ChatService.Base
 
         public void SendLoop()
         {
+            // in send loop during client is Connected.
             do
             {
                 try
                 {
+                    //show received message from server
                     var _receivedBuffer = new byte[1024];
                     int received = _socket.Receive(_receivedBuffer, SocketFlags.None);
                     if (received != 0)

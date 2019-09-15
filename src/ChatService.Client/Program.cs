@@ -15,11 +15,12 @@ namespace ChatService.Client
         {
             Console.Title = "Client";
 
+            //create a new client.
             socketProxy = new SocketProxy();
             client = new ClientBase(socketProxy);
 
             client.ConnectServer();
-            if (client.IsConnected)
+            if (client.IsConnected) //if client connected begin to send.
             {
                 client.SendLoop();
             }
