@@ -10,6 +10,14 @@ namespace ChatService.Base
     {
         private readonly ISocketProxy _socket;
 
+        public bool IsConnected
+        {
+            get
+            {
+                return _socket.IsConnected;
+            }
+        }
+
         public ClientBase(ISocketProxy socketProxy)
         {
             _socket = socketProxy;
@@ -24,8 +32,6 @@ namespace ChatService.Base
                 try
                 {
                     _socket.Connect(IPAddress.Loopback, 500);
-
-                    SendLoop();
                 }
                 catch (Exception ex)
                 {
@@ -35,7 +41,7 @@ namespace ChatService.Base
             Console.WriteLine("Connnected to server.");
         }
 
-        private void SendLoop()
+        public void SendLoop()
         {
             do
             {
