@@ -1,5 +1,8 @@
 ﻿using ChatService.Base;
 using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace ChatService.Client
 {
@@ -16,7 +19,7 @@ namespace ChatService.Client
             client = new ClientBase(socketProxy);
 
             client.ConnectServer();
-            
+
             Console.ReadLine();
         }
     }

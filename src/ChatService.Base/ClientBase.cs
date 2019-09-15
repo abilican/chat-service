@@ -18,11 +18,12 @@ namespace ChatService.Base
         public void ConnectServer()
         {
             //try connect to server until achive.
-            while (!_socket.Connected())
+            Console.WriteLine("Connecting...");
+            while (!_socket.IsConnected)
             {
                 try
                 {
-                    _socket.Connect(IPAddress.Any, 500);
+                    _socket.Connect(IPAddress.Loopback, 500);
 
                     SendLoop();
                 }
@@ -60,7 +61,7 @@ namespace ChatService.Base
                 {
                     Console.WriteLine(ex.Message);
                 }
-            } while (_socket.Connected());
+            } while (_socket.IsConnected);
 
         }
     }

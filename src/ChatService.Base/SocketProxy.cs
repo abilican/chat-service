@@ -26,6 +26,14 @@ namespace ChatService.Base
             }
         }
 
+        public bool IsConnected
+        {
+            get
+            {
+                return _socket.Connected;
+            }
+        }
+
         public SocketProxy()
         {
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -69,10 +77,6 @@ namespace ChatService.Base
             return _socket.BeginAccept(callback, state);
         }
 
-        public bool Connected()
-        {
-            return _socket.Connected;
-        }
         public ISocketProxy Accept()
         {
             return new SocketProxy(_socket.Accept());

@@ -11,13 +11,15 @@ namespace ChatService.Base
     {
         private readonly ISocketProxy _socket;
         //hold connected clients
-        private List<StateObject> _clients = new List<StateObject>();
+        private List<StateObject> _clients;
         //for thread sync   
-        public ManualResetEvent _event = new ManualResetEvent(false);
+        public AutoResetEvent _event;
 
         public ServerBase(ISocketProxy socketProxy)
         {
             _socket = socketProxy;
+            _event = new AutoResetEvent(false);
+            _clients = new List<StateObject>();
         }
 
         public void Run()
@@ -26,6 +28,7 @@ namespace ChatService.Base
             _socket.Bind(new IPEndPoint(IPAddress.Any, 500));
             _socket.Listen(10);
             Console.WriteLine("Waiting for Client Connections");
+            BeginListen();
         }
 
         public void BeginListen()
@@ -72,13 +75,14 @@ namespace ChatService.Base
             StateObject stateObject = (StateObject)iar.AsyncState;
             int bytesRead = stateObject.Socket.EndReceive(iar);
             bool continueReceiving = true;
+
+            continueReceiving = true;
+
             if (bytesRead > 0)
             {
                 string content = Encoding.ASCII.GetString(stateObject.Buffer, 0, bytesRead);
                 Console.WriteLine($"New Message From Client-{stateObject.ClientId}: {content}");
                 TimeSpan span = DateTime.Now - stateObject.LastConnectionTime;
-
-                continueReceiving = false;
 
                 if (span.TotalMilliseconds < 1000)
                 {

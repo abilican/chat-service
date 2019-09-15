@@ -18,10 +18,10 @@ namespace ChatService.Server
             server = new ServerBase(socketProxy);
 
             server.Run();
-            if (server.IsBoundedServer)
-            {
-                server.BeginListen();
-            }
+            //if (server.IsBoundedServer)
+            //{
+            //    server.BeginListen();
+            //}
 
             Console.ReadLine();
         }
